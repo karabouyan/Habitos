@@ -63,7 +63,7 @@ label{font-size:13px;color:var(--m)}
 .st{padding:0 16px 8px;color:var(--m);font-size:13px}.st.g{color:var(--g)}.pad{padding:16px}
 .xr{padding:12px 16px;border-bottom:1px solid #111}.xh{display:flex;align-items:baseline;gap:10px;margin-bottom:4px;flex-wrap:wrap}.xh b{font-weight:400;font-size:16px}
 .sm{font-size:12px;margin-bottom:8px}.cs{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.o{width:44px;height:44px;border-radius:50%;border:1px solid var(--l);color:var(--m);font-size:15px}.o.on{background:var(--g);border-color:var(--g);color:#000;font-weight:600}.o.pp{animation:pop .16s}
+.ci{width:44px;height:44px;border-radius:50%;border:1px solid var(--l);color:var(--m);font-size:15px}.ci.on{background:var(--g);border-color:var(--g);color:#000;font-weight:600}.ci.pp{animation:pop .16s}
 input.kg{width:64px;margin:0;padding:8px;text-align:center;font-size:15px}.ba{color:var(--g);font-size:12px;text-decoration:none}
 .xi{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #111}.xi b{font-weight:400}.xi button{color:var(--m);padding:6px 10px}
 .btn{display:block;margin:16px;padding:12px;border:1px solid var(--l);border-radius:10px;color:var(--g);text-align:center;width:calc(100% - 32px)}
@@ -71,6 +71,7 @@ select{width:100%;margin-top:6px;background:var(--l);color:#fff;border:0;border-
 .sk{display:flex;align-items:flex-end;gap:2px;height:18px;margin-top:6px}.sk s{display:block;width:5px;background:var(--g);border-radius:1px}
 .r4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.sp{display:flex;align-items:center;justify-content:space-between}.sp b{font-size:48px;font-weight:200}
 .sp button{width:64px;height:64px;border-radius:50%;border:1px solid var(--l);font-size:28px}.pk{display:block;width:100%;text-align:left;padding:12px 0;border-bottom:1px solid var(--l)}
+.pn.t{top:calc(env(safe-area-inset-top) + 10px);bottom:auto;left:8px;right:8px;border-radius:16px;max-height:calc(100% - env(safe-area-inset-top) - 20px)}
 </style></head><body>
 <header><div class="mn"><button id="pv">‹</button><span id="mt"></span><button id="nx">›</button></div><div id="act"></div></header>
 <div id="view"></div>
@@ -138,7 +139,7 @@ function hoy(){const k=tk(),L=(S.x.rt[xd]||[]).map(ex).filter(Boolean),tot=Objec
  if(!L.length)return o+'<p class="mu pad">'+(S.x.ex.length?'Sin ejercicios este día.':'Aún no hay ejercicios.')+'</p><button class="btn" data-a="xs" data-s="r">Ir a Rutina</button>';
  let all=true;const prs=[];
  L.forEach(e=>{const s=sets(k,e.id)||{r:[]},n=Math.max(e.s,s.r.length),B=best(e.id),pv=B.h.filter(x=>x[0]<k).pop();let cs='';
-  for(let i=0;i<n;i++){const v=s.r[i]>0;if(!v&&i<e.s)all=false;cs+='<button data-a="set" data-e="'+e.id+'" data-i="'+i+'" class="o'+(v?' on':'')+'">'+(v?s.r[i]:e.g)+'</button>'}
+  for(let i=0;i<n;i++){const v=s.r[i]>0;if(!v&&i<e.s)all=false;cs+='<button data-a="set" data-e="'+e.id+'" data-i="'+i+'" class="ci'+(v?' on':'')+'">'+(v?s.r[i]:e.g)+'</button>'}
   if(B.pr&&B.b.k===k)prs.push(e.n);
   const up=pv&&e.t>0&&pv[1].r.slice(0,e.s).filter(v=>v>=e.t).length>=e.s;
   o+='<div class="xr"><div class="xh"><b data-a="ex" data-e="'+e.id+'">'+esc(e.n)+'</b><span class="mu">'+e.s+'×'+e.g+'</span>'+(e.v?'<a class="ba" href="'+esc(e.v)+'" target="_blank" rel="noopener">▶</a>':'')+(up?'<span class="ba">↑ sube carga</span>':'')+'</div>'+(pv?'<div class="mu sm">Anterior: '+pv[1].r.filter(v=>v>0).join('·')+(pv[1].w?' · '+pv[1].w+' kg':'')+'</div>':'')+'<div class="cs">'+cs+'<input class="kg" type="number" inputmode="decimal" step="any" data-e="'+e.id+'" placeholder="kg" value="'+(e.w||'')+'"></div></div>'});
@@ -160,16 +161,16 @@ function rv(){const v=$('#view'),t=v.scrollTop;v.innerHTML=tab==='x'?xv():tab===
 function clean(k,id){const e=sets(k,id);if(e&&!n0(e)){delete S.x.ses[k][id];if(!Object.keys(S.x.ses[k]).length)delete S.x.ses[k]}}
 function tapSet(id,i){const x=ex(id);if(!x)return;const k=tk();S.x.ses[k]=S.x.ses[k]||{};const e=S.x.ses[k][id]=S.x.ses[k][id]||{r:[],w:0};
  if(e.r[i]>0)return stepper(id,i);for(let j=0;j<i;j++)if(!e.r[j])e.r[j]=0;e.r[i]=x.g;e.w=x.w||0;sync(k);save();haptic();
- const c=$('.o[data-e="'+id+'"][data-i="'+i+'"]'),rest=[...document.querySelectorAll('.o:not(.on)')].filter(z=>z!==c).length;
- if(!c||!rest||c.classList.contains('on'))rv();else{c.className='o on pp';c.textContent=x.g;const t=Object.values(S.x.ses[k]).reduce((a,z)=>a+n0(z),0),m=$('.st');if(m){m.className='st g';m.textContent='Día cumplido ✓ · '+t+' series'}}
- const c2=$('.o[data-e="'+id+'"][data-i="'+i+'"]');c2&&c2.classList.add('pp')}
+ const c=$('.ci[data-e="'+id+'"][data-i="'+i+'"]'),rest=[...document.querySelectorAll('.ci:not(.on)')].filter(z=>z!==c).length;
+ if(!c||!rest||c.classList.contains('on'))rv();else{c.className='ci on pp';c.textContent=x.g;const t=Object.values(S.x.ses[k]).reduce((a,z)=>a+n0(z),0),m=$('.st');if(m){m.className='st g';m.textContent='Día cumplido ✓ · '+t+' series'}}
+ const c2=$('.ci[data-e="'+id+'"][data-i="'+i+'"]');c2&&c2.classList.add('pp')}
 function stepper(id,i){stp={id,i};const e=sets(tk(),id);$('#sh').innerHTML='<div class="bg"></div><div class="pn"><div class="mu">'+esc(ex(id).n)+' · serie '+(i+1)+'</div><div class="sp"><button data-sa="-">−</button><b id="sn">'+e.r[i]+'</b><button data-sa="+">+</button></div><div class="ac"><button data-sa="x">Quitar</button><button data-sa="ok" class="g">Listo</button></div></div>';$('#sh').classList.add('o')}
 function step(a){const k=tk(),e=stp&&sets(k,stp.id);if(!e)return close();if(a==='ok')return close();
  e.r[stp.i]=a==='x'?0:cl((e.r[stp.i]||0)+(a==='+'?1:-1),0,999);
  if(!e.r[stp.i])close();else $('#sn').textContent=e.r[stp.i];
  clean(k,stp.id);sync(k);save();rv()}
 function sheetEx(id){const e=id?ex(id):{n:'',gr:'',d:'',v:'',s:3,g:10,t:'',w:''};xe=id||0;
- $('#sh').innerHTML='<div class="bg"></div><div class="pn"><input id="en" placeholder="Ejercicio" value="'+esc(e.n)+'"><input id="eg" list="gl" placeholder="Grupo (opcional)" value="'+esc(e.gr)+'"><datalist id="gl">'+[...new Set(S.x.ex.map(x=>x.gr).filter(Boolean))].map(g=>'<option value="'+esc(g)+'">').join('')+'</datalist><textarea id="ed" rows="2" placeholder="Descripción / pistas de técnica">'+esc(e.d)+'</textarea><input id="ev" inputmode="url" placeholder="Link de video (opcional)" value="'+esc(e.v)+'"><div class="r4"><label>Series<input id="es" type="number" inputmode="numeric" value="'+e.s+'"></label><label>Reps<input id="er" type="number" inputmode="numeric" value="'+e.g+'"></label><label>Tope<input id="et" type="number" inputmode="numeric" value="'+(e.t||'')+'"></label><label>kg<input id="ew" type="number" inputmode="decimal" step="any" value="'+(e.w||'')+'"></label></div><div class="ac">'+(id?'<button id="xdl">Eliminar</button>':'')+'<button id="xsv" class="g">Guardar</button></div></div>';$('#sh').classList.add('o')}
+ $('#sh').innerHTML='<div class="bg"></div><div class="pn t"><input enterkeyhint="done" id="en" placeholder="Ejercicio" value="'+esc(e.n)+'"><input enterkeyhint="done" id="eg" list="gl" placeholder="Grupo (opcional)" value="'+esc(e.gr)+'"><datalist id="gl">'+[...new Set(S.x.ex.map(x=>x.gr).filter(Boolean))].map(g=>'<option value="'+esc(g)+'">').join('')+'</datalist><textarea id="ed" rows="2" placeholder="Descripción / pistas de técnica">'+esc(e.d)+'</textarea><input enterkeyhint="done" id="ev" inputmode="url" placeholder="Link de video (opcional)" value="'+esc(e.v)+'"><div class="r4"><label>Series<input id="es" type="number" inputmode="numeric" value="'+e.s+'"></label><label>Reps<input id="er" type="number" inputmode="numeric" value="'+e.g+'"></label><label>Tope<input id="et" type="number" inputmode="numeric" value="'+(e.t||'')+'"></label><label>kg<input id="ew" type="number" inputmode="decimal" step="any" value="'+(e.w||'')+'"></label></div><div class="ac">'+(id?'<button id="xdl">Eliminar</button>':'')+'<button id="xsv" class="g">Guardar</button></div></div>';$('#sh').classList.add('o')}
 function xsave(){const n=$('#en').value.trim();if(!n)return;let v=$('#ev').value.trim();if(v&&!/^https?:\/\//i.test(v))v='https://'+v;try{if(v)new URL(v)}catch(e){v=''}
  const g=cl(Math.round(+$('#er').value)||10,1,200),t=Math.round(+$('#et').value)||0,o={n:n.slice(0,60),gr:$('#eg').value.trim().slice(0,24),d:$('#ed').value.trim().slice(0,400),v:v.slice(0,300),s:cl(Math.round(+$('#es').value)||3,1,10),g,t:t>g?cl(t,1,200):0,w:cl(+$('#ew').value||0,0,999)};
  if(xe&&ex(xe))Object.assign(ex(xe),o);else{o.id=S.x.nid++;S.x.ex.push(o);(S.x.rt[xd]=S.x.rt[xd]||[]).push(o.id)}save();close();render()}
@@ -183,7 +184,7 @@ function xclick(t){const d=t.dataset;
 function xact(a){const d=a.dataset,id=+d.e;
  if(d.a==='xs'){xs=d.s;xd=wd(td());render()}else if(d.a==='day'){xd=+d.d;rv()}else if(d.a==='set')tapSet(id,+d.i);else if(d.a==='ex')sheetEx(id);
  else if(d.a==='rm'){S.x.rt[xd]=(S.x.rt[xd]||[]).filter(x=>x!==id);save();rv()}else if(d.a==='padd')picker()}
-function render(){const isx=tab==='x';$('#mt').textContent=isx?'Ejercicio':MES[cur.getMonth()]+' '+cur.getFullYear();$('#pv').style.visibility=$('#nx').style.visibility=isx?'hidden':'visible';
+function render(){const isx=tab==='x';$('#mt').textContent=isx?'Ejercicio':MES[cur.getMonth()]+' '+cur.getFullYear();$('#pv').style.display=$('#nx').style.display=isx?'none':'';
 $('#act').innerHTML=tab==='h'?'<button class="tx'+(S.heavy?' on':'')+'" id="hv">Semana pesada</button><button class="plus" id="add">+</button>':isx?(xs==='r'?'<button class="plus" id="xadd">+</button>':''):'<button class="tx" id="bk">Respaldo</button>';
 document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
 const v=$('#view');v.innerHTML=isx?xv():tab==='h'?trk():dash();
@@ -191,11 +192,11 @@ if(tab==='h'&&isCur())v.scrollLeft=Math.max(0,(td().getDate()-4)*36)}
 
 function warn(){const n=S.h.filter(h=>h.p==='b'&&h.id!==ed).length;$('#wn').textContent=ep==='b'&&n>=2?'Ya tienes '+n+' en construcción. Considera esperar a que uno se consolide.':''}
 function sheet(id){const h=id?S.h.find(x=>x.id===id):{n:'',p:'b',g:20,m:'',t:''};ed=id||0;ep=h.p;
-$('#sh').innerHTML='<div class="bg"></div><div class="pn"><input id="fn" placeholder="Hábito" value="'+esc(h.n)+'"><div class="pr">'+
+$('#sh').innerHTML='<div class="bg"></div><div class="pn t"><input id="fn" placeholder="Hábito" value="'+esc(h.n)+'"><div class="pr">'+
 [['r','No negociable'],['y','Importante'],['b','En construcción']].map(([k,l])=>'<button data-p="'+k+'" class="'+(h.p===k?'s':'')+'" style="--c:var(--'+k+')">'+l+'</button>').join('')+
 '</div><div id="wn" class="mu"></div><label>Meta: días al mes<input id="fg" type="number" inputmode="numeric" min="1" max="31" value="'+(h.g||'')+'"></label><label>Versión mínima (cuenta como hecho)<input id="fm" placeholder="Ej. 1 flexión" value="'+esc(h.m)+'"></label><label>Después de…<input id="ft" placeholder="Ej. al servirme el café" value="'+esc(h.t)+'"></label><div class="ac">'+(id?'<button id="dl">Eliminar</button>':'')+'<button id="sv" class="g">Guardar</button></div></div>';
 $('#sh').classList.add('o');warn()}
-function backup(){$('#sh').innerHTML='<div class="bg"></div><div class="pn"><label>Respaldo de tus datos<textarea id="tx" rows="6">'+esc(JSON.stringify(S))+'</textarea></label><div class="ac"><button id="rs" style="color:#fff">Restaurar</button><button id="cp" class="g">Copiar</button></div></div>';$('#sh').classList.add('o')}
+function backup(){$('#sh').innerHTML='<div class="bg"></div><div class="pn t"><label>Respaldo de tus datos<textarea id="tx" rows="6">'+esc(JSON.stringify(S))+'</textarea></label><div class="ac"><button id="rs" style="color:#fff">Restaurar</button><button id="cp" class="g">Copiar</button></div></div>';$('#sh').classList.add('o')}
 const close=()=>$('#sh').classList.remove('o');
 
 $('#sh').onclick=e=>{const t=e.target;
@@ -215,6 +216,7 @@ $('#act').onclick=e=>{const i=e.target.id;if(i==='add')sheet(0);if(i==='xadd')sh
 $('#pv').onclick=()=>{cur=new Date(cur.getFullYear(),cur.getMonth()-1,1);render()};
 $('#nx').onclick=()=>{cur=new Date(cur.getFullYear(),cur.getMonth()+1,1);render()};
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;if(tab==='x')xd=wd(td());render()});
+$('#sh').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.tagName==='INPUT'){e.preventDefault();e.target.blur()}});
 let LK=tk();document.addEventListener('visibilitychange',()=>{if(!document.hidden){if(tk()!==LK){LK=tk();xd=wd(td());cur=new Date(td().getFullYear(),td().getMonth(),1)}render()}});
 render();
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
