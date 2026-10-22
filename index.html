@@ -72,6 +72,15 @@ select{width:100%;margin-top:6px;background:var(--l);color:#fff;border:0;border-
 .r4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.sp{display:flex;align-items:center;justify-content:space-between}.sp b{font-size:48px;font-weight:200}
 .sp button{width:64px;height:64px;border-radius:50%;border:1px solid var(--l);font-size:28px}.pk{display:block;width:100%;text-align:left;padding:12px 0;border-bottom:1px solid var(--l)}
 .pn.t{top:calc(env(safe-area-inset-top) + 10px);bottom:auto;left:8px;right:8px;border-radius:16px;max-height:calc(100% - env(safe-area-inset-top) - 20px)}
+html,body,button{touch-action:manipulation}button{-webkit-user-select:none;user-select:none}
+.ch{height:46px;border-radius:23px;padding:0}.ch em{display:block;font-style:normal;font-size:10px;color:var(--g);line-height:1;margin-top:2px}
+.ci.f{opacity:.3;pointer-events:none}
+.sk{height:28px}.sk s{background:#4a4a4c}.sk s.g{background:var(--g)}
+.rh{display:flex;justify-content:space-between;align-items:center;padding:0 16px 6px}.rb{color:#fff;font-size:17px}
+.rs{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 10px}.rs button{padding:8px 14px;border:1px solid var(--l);border-radius:18px;color:var(--m)}.rs .on{border-color:var(--g);color:var(--g)}
+.pc{padding:12px 16px;border-bottom:1px solid #111}.pc .t{display:flex;justify-content:space-between;align-items:baseline}.pc .sk{margin:8px 0}
+.dt{margin-top:8px}.dt div{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;color:var(--m);border-top:1px solid #111}.dt span:first-child{width:56px}.dt span:last-child{width:84px;text-align:right}
+.wr{display:flex;justify-content:space-between;padding:0 24px 14px}.wd{display:flex;flex-direction:column;align-items:center;gap:6px}.wd i{width:16px;height:16px;border-radius:50%;border:1px solid #3a3a3c}.wd i.pl{border-color:#fff}.wd i.dn{background:var(--g);border-color:var(--g)}
 </style></head><body>
 <header><div class="mn"><button id="pv">‹</button><span id="mt"></span><button id="nx">›</button></div><div id="act"></div></header>
 <div id="view"></div>
@@ -84,7 +93,16 @@ const ORD={r:0,y:1,b:2},td=()=>new Date();
 let S;try{S=JSON.parse(localStorage.getItem(K))}catch(e){}
 if(!S||!Array.isArray(S.h)||!S.l||typeof S.l!=='object')S=null;
 S=S||{h:[{id:1,n:'Dormir 8 horas',p:'r',g:25,m:'',t:''},{id:2,n:'Flexiones',p:'b',g:20,m:'1 flexión',t:''},{id:3,n:'Leer',p:'y',g:20,m:'1 página',t:''}],l:{},nid:4,heavy:false};
-function fx(d){d.x=d.x&&typeof d.x==='object'?d.x:{};const x=d.x,o=v=>v&&typeof v==='object'&&!Array.isArray(v)?v:{};x.ex=Array.isArray(x.ex)?x.ex.filter(e=>e&&typeof e==='object'&&e.id):[];x.rt=o(x.rt);x.ses=o(x.ses);x.au=o(x.au);x.hid=+x.hid||0;x.nid=x.nid||Math.max(0,...x.ex.map(e=>e.id))+1;return d}
+function fx(d){d.x=d.x&&typeof d.x==='object'?d.x:{};const x=d.x,o=v=>v&&typeof v==='object'&&!Array.isArray(v)?v:{},c=(v,a,b,z)=>Math.min(b,Math.max(a,Math.round(+v)||z));
+x.ex=Array.isArray(x.ex)?x.ex.filter(e=>e&&typeof e==='object'&&e.id):[];
+x.ex.forEach(e=>{e.n=String(e.n||'Ejercicio');e.gr=String(e.gr||'');e.d=String(e.d||'');e.v=String(e.v||'');e.s=c(e.s,1,10,3);e.g=c(e.g,1,200,10);e.t=c(e.t,0,200,0);e.w=Math.min(999,Math.max(0,+e.w||0))});
+const ids=new Set(x.ex.map(e=>e.id));x.ses=o(x.ses);x.au=o(x.au);x.wk=o(x.wk);x.ov=o(x.ov);x.hid=+x.hid||0;
+if(!Array.isArray(x.rn)){x.rn=[];const rt=o(x.rt);for(const k in rt){const L=(Array.isArray(rt[k])?rt[k]:[]).filter(i=>ids.has(i));if(!L.length)continue;const key=L.slice().sort().join();let r=x.rn.find(r=>r.ex.slice().sort().join()===key);if(!r){r={id:x.rn.length+1,n:'ABCDEFGHIJ'[x.rn.length]||'R'+(x.rn.length+1),ex:L};x.rn.push(r)}x.wk[k]=r.id}}
+delete x.rt;x.rn=x.rn.filter(r=>r&&typeof r==='object'&&r.id);x.rn.forEach(r=>{r.n=String(r.n||'R').slice(0,12);r.ex=(Array.isArray(r.ex)?r.ex:[]).filter(i=>ids.has(i))});
+for(const k in x.wk)if(!x.rn.some(r=>r.id===x.wk[k]))delete x.wk[k];
+x.rnid=x.rnid||Math.max(0,...x.rn.map(r=>r.id))+1;x.nid=x.nid||Math.max(0,...x.ex.map(e=>e.id))+1;
+for(const k in x.ses){const a=x.ses[k];if(!a||typeof a!=='object'){delete x.ses[k];continue}for(const i in a){const e=a[i],z=x.ex.find(y=>y.id==i);if(!e||!Array.isArray(e.r)||!z){delete a[i];continue}e.r=e.r.map(v=>+v>0?+v:0);e.w=+e.w||0;e.g=+e.g||z.g;e.s=+e.s||z.s}if(!Object.keys(a).length)delete x.ses[k]}
+return d}
 S.nid=S.nid||Math.max(0,...S.h.map(h=>h.id))+1;fx(S);
 let KS=null,sv_=0;const flush=()=>{if(sv_){clearTimeout(sv_);sv_=0;try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}};
 const save=()=>{KS=null;if(!sv_)sv_=setTimeout(flush,150)};
@@ -119,71 +137,90 @@ sorted().forEach(h=>{const p=pct(h);o+='<div class="hr"><div class="t"><span><i 
 return o}
 
 // ===== EJERCICIO =====
-const DN=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'],DL=['L','M','X','J','V','S','D'];
-const dk=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()),wd=d=>(d.getDay()+6)%7,tk=()=>dk(td()),cl=(v,a,b)=>Math.min(b,Math.max(a,v));
-let xs='h',xd=wd(td()),xe=0,stp=null;
-const ex=id=>S.x.ex.find(e=>e.id===id),sets=(k,id)=>(S.x.ses[k]||{})[id],n0=e=>e?e.r.filter(v=>v>0).length:0,keys=()=>KS||(KS=Object.keys(S.x.ses).sort());
-const done=k=>{const a=S.x.ses[k];return !!a&&Object.values(a).some(e=>n0(e)>0)};
-const wdate=i=>{const t=td();return new Date(t.getFullYear(),t.getMonth(),t.getDate()-wd(t)+i)};
+const DN=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'],DL=['L','M','X','J','V','S','D'],MS=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const dk=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()),wd=d=>(d.getDay()+6)%7,tk=()=>dk(td()),cl=(v,a,b)=>Math.min(b,Math.max(a,v)),pd=k=>{const[y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d)};
+let xs='h',xd=wd(td()),xe=0,xr=0,stp=null,po={},PX=null,PK='',pall=false;
+const ex=id=>S.x.ex.find(e=>e.id===id),rn=id=>S.x.rn.find(r=>r.id===id),sets=(k,id)=>(S.x.ses[k]||{})[id],n0=e=>e?e.r.filter(v=>v>0).length:0,keys=()=>KS||(KS=Object.keys(S.x.ses).sort());
+const tot=k=>Object.values(S.x.ses[k]||{}).reduce((a,e)=>a+n0(e),0),done=k=>tot(k)>0,full=e=>n0(e)>0&&e.r.filter(v=>v>=e.g).length>=e.s,rt=e=>e.r.reduce((a,v)=>a+(v>0?v:0),0)+'/'+e.s*e.g;
+const wdate=i=>{const t=td();return new Date(t.getFullYear(),t.getMonth(),t.getDate()-wd(t)+i)},xk=()=>dk(wdate(xd));
+const rof=k=>{const o=S.x.ov[k],id=o!==undefined?o:S.x.wk[wd(pd(k))];return id?rn(id)||null:null};
+const nextN=()=>{const u=new Set(S.x.rn.map(r=>r.n));for(const c of 'ABCDEFGHIJKLMNOPQRSTUVWXYZ')if(!u.has(c))return c;return 'R'+(S.x.rn.length+1)};
+const rday=(d,mk_)=>{let r=rn(S.x.wk[d]);if(!r&&mk_){r={id:S.x.rnid++,n:nextN(),ex:[]};S.x.rn.push(r);S.x.wk[d]=r.id}return r};
 function sync(k){const h=S.x.hid;if(!h||!S.h.some(x=>x.id===h))return;const[y,m,d]=k.split('-').map(Number),mo=y+'-'+pad(m);S.l[mo]=S.l[mo]||{};const a=S.l[mo][h]=S.l[mo][h]||[],i=a.indexOf(d);
  if(done(k)){if(i<0){a.push(d);S.x.au[k]=1}}else if(i>=0&&S.x.au[k]){a.splice(i,1);delete S.x.au[k]}}
-function chips(){return '<div class="cp">'+DL.map((l,d)=>'<button data-a="day" data-d="'+d+'" class="ch'+(d===xd?' s':'')+((S.x.rt[d]||[]).length?' r':'')+(d===wd(td())?' t':'')+'">'+l+'<i class="'+(done(dk(wdate(d)))?'dn':'')+'"></i></button>').join('')+'</div>'}
+function chips(r){return '<div class="cp">'+DL.map((l,d)=>{const k=dk(wdate(d)),R=r?rn(S.x.wk[d]):rof(k);return '<button data-a="day" data-d="'+d+'" class="ch'+(d===xd?' s':'')+(R?' r':'')+(d===wd(td())?' t':'')+'">'+l+(r?'<em>'+(R?esc(R.n):'·')+'</em>':'<i class="'+(done(k)?'dn':'')+'"></i>')+'</button>'}).join('')+'</div>'}
 const sc=(r,w)=>w>0?w*(1+r/30):r;
-let PX=null,PK='';
 function px(){const k=tk();if(PX&&PK===k)return PX;PX={};for(const d of keys()){if(d>=k)break;const a=S.x.ses[d];for(const id in a)if(n0(a[id]))(PX[id]=PX[id]||[]).push([d,a[id]])}PK=k;return PX}
 function hist(id){const o=(px()[id]||[]).slice(),k=tk(),K=keys(),f=[];for(let i=K.length-1;i>=0&&K[i]>=k;i--){const e=S.x.ses[K[i]][id];if(e&&n0(e))f.push([K[i],e])}return o.concat(f.reverse())}
 function best(id){const h=hist(id),t=td(),w7=dk(new Date(t.getFullYear(),t.getMonth(),t.getDate()-6));let b=null,pr=false;
  h.forEach(([k,e],i)=>e.r.forEach(r=>{if(r>0){const s=sc(r,e.w);if(!b||s>b.s){b={s,r,w:e.w,k};pr=i>0&&k>=w7}}}));return{b,pr,h}}
-function hoy(){const k=tk(),L=(S.x.rt[xd]||[]).map(ex).filter(Boolean),tot=Object.values(S.x.ses[k]||{}).reduce((a,e)=>a+n0(e),0),dn=tot>0;
- let o=chips()+'<div class="st'+(dn?' g':'')+'">'+(dn?'Día cumplido ✓ · '+tot+' series':'1 serie cuenta como día cumplido')+'</div>';
- if(!L.length)return o+'<p class="mu pad">'+(S.x.ex.length?'Sin ejercicios este día.':'Aún no hay ejercicios.')+'</p><button class="btn" data-a="xs" data-s="r">Ir a Rutina</button>';
+function hoy(){const k=xk(),R=rof(k),L=R?R.ex.map(ex).filter(Boolean):[],fut=k>tk(),t=tot(k);
+ let o=chips()+'<div class="rh"><button class="rb" data-a="rsel">'+(R?'Rutina '+esc(R.n):'Descanso')+' ▾</button><span class="mu">'+DN[xd]+' '+pd(k).getDate()+'</span></div><div class="st'+(t&&!fut?' g':'')+'">'+(fut?'Programado · aún no es este día':t?'Día cumplido ✓ · '+t+' series':'1 serie cuenta como día cumplido')+'</div>';
+ if(!L.length)return o+'<p class="mu pad">'+(R?'Esta rutina aún no tiene ejercicios.':S.x.ex.length?'Día de descanso.':'Aún no hay ejercicios.')+'</p><button class="btn" data-a="xs" data-s="r">Ir a Rutina</button>';
  let all=true;const prs=[];
- L.forEach(e=>{const s=sets(k,e.id)||{r:[]},n=Math.max(e.s,s.r.length),B=best(e.id),pv=B.h.filter(x=>x[0]<k).pop();let cs='';
-  for(let i=0;i<n;i++){const v=s.r[i]>0;if(!v&&i<e.s)all=false;cs+='<button data-a="set" data-e="'+e.id+'" data-i="'+i+'" class="ci'+(v?' on':'')+'">'+(v?s.r[i]:e.g)+'</button>'}
+ L.forEach(e=>{const q=sets(k,e.id),s=q?q.s:e.s,g=q?q.g:e.g,r=q?q.r:[],n=Math.max(s,r.length),B=best(e.id),pv=B.h.filter(x=>x[0]<k).pop();let cs='';
+  for(let i=0;i<n;i++){const v=r[i]>0;if(!v&&i<s)all=false;cs+='<button type="button" data-a="set" data-e="'+e.id+'" data-i="'+i+'" class="ci'+(v?' on':'')+(fut?' f':'')+'">'+(v?r[i]:g)+'</button>'}
   if(B.pr&&B.b.k===k)prs.push(e.n);
-  const up=pv&&e.t>0&&pv[1].r.slice(0,e.s).filter(v=>v>=e.t).length>=e.s;
-  o+='<div class="xr"><div class="xh"><b data-a="ex" data-e="'+e.id+'">'+esc(e.n)+'</b><span class="mu">'+e.s+'×'+e.g+'</span>'+(e.v?'<a class="ba" href="'+esc(e.v)+'" target="_blank" rel="noopener">▶</a>':'')+(up?'<span class="ba">↑ sube carga</span>':'')+'</div>'+(pv?'<div class="mu sm">Anterior: '+pv[1].r.filter(v=>v>0).join('·')+(pv[1].w?' · '+pv[1].w+' kg':'')+'</div>':'')+'<div class="cs">'+cs+'<input class="kg" type="number" inputmode="decimal" step="any" data-e="'+e.id+'" placeholder="kg" value="'+(e.w||'')+'"></div></div>'});
- if(all)o+='<div class="st g" style="padding-top:12px">Sesión completa ✓'+(prs.length?' · Nueva marca: '+prs.map(esc).join(', '):'')+'</div>';return o}
-function rut(){const L=(S.x.rt[xd]||[]).map(ex).filter(Boolean);
- let o=chips()+'<div class="st">'+DN[xd]+' · '+L.length+' ejercicio'+(L.length===1?'':'s')+(L.length>6?' · sugerido máx. 6':'')+'</div>';
+  const up=pv&&e.t>0&&pv[1].r.slice(0,pv[1].s).filter(v=>v>=e.t).length>=pv[1].s;
+  o+='<div class="xr"><div class="xh"><b data-a="ex" data-e="'+e.id+'">'+esc(e.n)+'</b><span class="mu">'+s+'×'+g+'</span>'+(e.v?'<a class="ba" href="'+esc(e.v)+'" target="_blank" rel="noopener">▶</a>':'')+(up?'<span class="ba">↑ sube carga</span>':'')+'</div>'+(pv?'<div class="mu sm">Anterior: '+pv[1].r.filter(v=>v>0).join('·')+(pv[1].w?' · '+pv[1].w+' kg':'')+'</div>':'')+'<div class="cs">'+cs+'<input class="kg" type="number" inputmode="decimal" step="any" data-e="'+e.id+'" placeholder="kg" value="'+(e.w||'')+'"></div></div>'});
+ return o+(all&&!fut?'<div class="st g" style="padding-top:12px">Sesión completa ✓'+(prs.length?' · Nueva marca: '+prs.map(esc).join(', '):'')+'</div>':'')}
+const hab=()=>'<div class="pad mu">Marcar series cuenta como el hábito:<select id="hs"><option value="0">Ninguno</option>'+S.h.map(h=>'<option value="'+h.id+'"'+(h.id===S.x.hid?' selected':'')+'>'+esc(h.n)+'</option>').join('')+'</select></div>';
+function rut(){const R=rn(S.x.wk[xd]),L=R?R.ex.map(ex).filter(Boolean):[];
+ let o=chips(1)+'<div class="rs">'+S.x.rn.map(r=>'<button data-a="wk" data-r="'+r.id+'" class="'+(R&&R.id===r.id?'on':'')+'">'+esc(r.n)+'</button>').join('')+'<button data-a="wk" data-r="0" class="'+(R?'':'on')+'">Descanso</button><button data-a="rnew">+</button></div>';
+ if(!R)return o+'<p class="mu pad">'+DN[xd]+' es descanso. Elige una rutina arriba o crea una con +.</p>'+hab();
+ const ds=DL.filter((l,d)=>S.x.wk[d]===R.id).join(' · ');
+ o+='<div class="st" style="display:flex;justify-content:space-between"><span>Rutina '+esc(R.n)+' · '+L.length+' ejercicio'+(L.length===1?'':'s')+(L.length>6?' · sugerido máx. 6':'')+'</span><button class="tx" data-a="rren">Renombrar</button></div>';
  L.forEach(e=>o+='<div class="xi"><b data-a="ex" data-e="'+e.id+'">'+esc(e.n)+' <span class="mu">'+e.s+'×'+e.g+(e.gr?' · '+esc(e.gr):'')+'</span></b><button data-a="rm" data-e="'+e.id+'">✕</button></div>');
- return o+'<button class="btn" data-a="padd">+ Agregar ejercicio</button><div class="pad mu">Marcar series cuenta como el hábito:<select id="hs"><option value="0">Ninguno</option>'+S.h.map(h=>'<option value="'+h.id+'"'+(h.id===S.x.hid?' selected':'')+'>'+esc(h.n)+'</option>').join('')+'</select></div>'}
-function prog(){const wk=[0,1,2,3,4,5,6].map(i=>dk(wdate(i))),pl=Object.keys(S.x.rt).filter(d=>(S.x.rt[d]||[]).length).length,dn=wk.filter(k=>done(k)).length,g={};
- wk.forEach(k=>Object.entries(S.x.ses[k]||{}).forEach(([id,e])=>{const n=n0(e);if(n){const x=ex(+id),nm=(x&&x.gr)||'Otros';g[nm]=(g[nm]||0)+n}}));
- let o='<div class="big">'+dn+'<small>/'+(pl||dn)+'</small></div><div class="sb mu">sesiones esta semana</div>';const G=Object.entries(g).sort((a,b)=>b[1]-a[1]);
+ return o+'<div class="mu sm" style="padding:8px 16px 0">Los cambios aplican a todos los días de esta rutina: '+(ds||'ninguno')+'</div><button class="btn" data-a="padd">+ Agregar ejercicio</button>'+hab()}
+function prog(){const wk=[0,1,2,3,4,5,6].map(i=>dk(wdate(i))),g={};let pl=0,dn=0,dots='';
+ wk.forEach((k,i)=>{const R=rof(k),d=done(k);if(R||d)pl++;if(d)dn++;dots+='<div class="wd"><i class="'+(d?'dn':R?'pl':'')+'"></i><span class="mu">'+DL[i]+'</span></div>';Object.entries(S.x.ses[k]||{}).forEach(([id,e])=>{const n=n0(e);if(n){const x=ex(+id),nm=(x&&x.gr)||'Otros';g[nm]=(g[nm]||0)+n}})});
+ let o='<div class="big">'+dn+'<small>/'+(pl||dn)+'</small></div><div class="sb mu">sesiones esta semana</div><div class="wr">'+dots+'</div>';const G=Object.entries(g).sort((a,b)=>b[1]-a[1]);
  if(G.length){o+='<div class="sb mu">Series por grupo · ref. 5–10 a la semana</div>';G.forEach(([n,v])=>o+='<div class="hr"><div class="t"><span>'+esc(n)+'</span><span class="mu">'+v+'</span></div><div class="pb"><div style="width:'+Math.min(100,v*10)+'%"></div></div></div>')}
- o+='<div class="sb mu">Mejor serie</div>';let any=0;
- S.x.ex.slice().sort((a,b)=>a.n.localeCompare(b.n)).forEach(e=>{const B=best(e.id);if(!B.b)return;any=1;const t=B.h.slice(-8).map(x=>x[1].r.reduce((a,v)=>a+(v>0?v:0),0)),mx=Math.max(...t);
-  o+='<div class="hr"><div class="t"><span>'+esc(e.n)+(B.pr?' <span class="ba">↑</span>':'')+'</span><span class="mu">'+B.b.r+(B.b.w?' × '+B.b.w+' kg':' reps')+'</span></div><div class="sk">'+t.map(v=>'<s style="height:'+Math.max(8,Math.round(v/mx*100))+'%"></s>').join('')+'</div></div>'});
- return o+(any?'':'<p class="mu pad">Aún sin registros.</p>')}
+ o+='<div class="sb mu">Ejercicios · toca uno para ver sus sesiones</div><div class="sb mu" style="padding-top:0">Barra verde = meta cumplida · gris = parcial · altura = repeticiones</div>';let any=0;
+ const BL=S.x.ex.map(e=>[e,best(e.id)]).filter(x=>x[1].b).sort((a,b)=>a[1].h[a[1].h.length-1][0]<b[1].h[b[1].h.length-1][0]?1:a[1].h[a[1].h.length-1][0]>b[1].h[b[1].h.length-1][0]?-1:a[0].n.localeCompare(b[0].n));
+ (pall?BL:BL.slice(0,30)).forEach(([e,B])=>{any=1;const h=B.h,lt=h[h.length-1][1],W=h.slice(-8),tr=W.map(([k,x])=>x.r.reduce((a,v)=>a+(v>0?v:0),0)),mx=Math.max(...tr),fc=h.filter(x=>full(x[1])).length,ago=Math.round((pd(tk())-pd(h[h.length-1][0]))/864e5),up=e.t>0&&lt.r.slice(0,lt.s).filter(v=>v>=e.t).length>=lt.s;
+  o+='<div class="pc" data-a="pe" data-e="'+e.id+'"><div class="t"><span>'+esc(e.n)+(e.gr?' <span class="mu">'+esc(e.gr)+'</span>':'')+'</span><span class="ba">'+(B.pr?'↑ Nueva marca':up?'↑ Sube carga':'')+'</span></div><div class="mu sm">Última: '+lt.r.filter(v=>v>0).join('·')+' · '+rt(lt)+' · '+(ago===0?'hoy':ago===1?'ayer':'hace '+ago+' días')+'</div><div class="sk">'+W.map(([k,x],i)=>'<s class="'+(full(x)?'g':'')+'" style="height:'+Math.max(10,Math.round(tr[i]/mx*100))+'%"></s>').join('')+'</div><div class="mu sm">Meta cumplida en '+fc+' de '+h.length+(h.length===1?' sesión':' sesiones')+' · mejor serie '+B.b.r+(B.b.w?' × '+B.b.w+' kg':' reps')+'</div>';
+  if(po[e.id])o+='<div class="dt">'+h.slice(-6).reverse().map(([k,x])=>'<div><span>'+pd(k).getDate()+' '+MS[pd(k).getMonth()]+'</span><span>'+x.r.filter(v=>v>0).join('·')+'</span><span>'+rt(x)+(full(x)?' ✓':'')+'</span></div>').join('')+'</div>';
+  o+='</div>'});
+ return o+(BL.length>30&&!pall?'<button class="btn" data-a="pall">Ver todos ('+BL.length+')</button>':'')+(any?'':'<p class="mu pad">Aún sin registros.</p>')}
 function xv(){const L={h:'Hoy',r:'Rutina',p:'Progreso'};return '<div class="sg">'+['h','r','p'].map(s=>'<button data-a="xs" data-s="'+s+'" class="'+(xs===s?'on':'')+'">'+L[s]+'</button>').join('')+'</div>'+(xs==='h'?hoy():xs==='r'?rut():prog())}
 function rv(){const v=$('#view'),t=v.scrollTop;v.innerHTML=tab==='x'?xv():tab==='h'?trk():dash();v.scrollTop=t}
 function clean(k,id){const e=sets(k,id);if(e&&!n0(e)){delete S.x.ses[k][id];if(!Object.keys(S.x.ses[k]).length)delete S.x.ses[k]}}
-function tapSet(id,i){const x=ex(id);if(!x)return;const k=tk();S.x.ses[k]=S.x.ses[k]||{};const e=S.x.ses[k][id]=S.x.ses[k][id]||{r:[],w:0};
- if(e.r[i]>0)return stepper(id,i);for(let j=0;j<i;j++)if(!e.r[j])e.r[j]=0;e.r[i]=x.g;e.w=x.w||0;sync(k);save();haptic();
+function tapSet(id,i){const x=ex(id),k=xk();if(!x||k>tk())return;S.x.ses[k]=S.x.ses[k]||{};const e=S.x.ses[k][id]=S.x.ses[k][id]||{r:[],w:0,g:x.g,s:x.s};
+ if(e.r[i]>0)return stepper(id,i);for(let j=0;j<i;j++)if(!e.r[j])e.r[j]=0;e.r[i]=e.g;e.w=x.w||0;if(k<tk())PX=null;sync(k);save();haptic();
  const c=$('.ci[data-e="'+id+'"][data-i="'+i+'"]'),rest=[...document.querySelectorAll('.ci:not(.on)')].filter(z=>z!==c).length;
- if(!c||!rest||c.classList.contains('on'))rv();else{c.className='ci on pp';c.textContent=x.g;const t=Object.values(S.x.ses[k]).reduce((a,z)=>a+n0(z),0),m=$('.st');if(m){m.className='st g';m.textContent='Día cumplido ✓ · '+t+' series'}}
+ if(!c||!rest||c.classList.contains('on'))rv();else{c.className='ci on pp';c.textContent=e.g;const m=$('.st');if(m){m.className='st g';m.textContent='Día cumplido ✓ · '+tot(k)+' series'}}
  const c2=$('.ci[data-e="'+id+'"][data-i="'+i+'"]');c2&&c2.classList.add('pp')}
-function stepper(id,i){stp={id,i};const e=sets(tk(),id);$('#sh').innerHTML='<div class="bg"></div><div class="pn"><div class="mu">'+esc(ex(id).n)+' · serie '+(i+1)+'</div><div class="sp"><button data-sa="-">−</button><b id="sn">'+e.r[i]+'</b><button data-sa="+">+</button></div><div class="ac"><button data-sa="x">Quitar</button><button data-sa="ok" class="g">Listo</button></div></div>';$('#sh').classList.add('o')}
-function step(a){const k=tk(),e=stp&&sets(k,stp.id);if(!e)return close();if(a==='ok')return close();
- e.r[stp.i]=a==='x'?0:cl((e.r[stp.i]||0)+(a==='+'?1:-1),0,999);
- if(!e.r[stp.i])close();else $('#sn').textContent=e.r[stp.i];
- clean(k,stp.id);sync(k);save();rv()}
+function stepper(id,i){const k=xk(),e=sets(k,id);stp={id,i,k};$('#sh').innerHTML='<div class="bg"></div><div class="pn"><div class="mu">'+esc(ex(id).n)+' · serie '+(i+1)+' · meta '+e.g+'</div><div class="sp"><button type="button" data-sa="-">−</button><b id="sn">'+e.r[i]+'</b><button type="button" data-sa="+">+</button></div><div class="ac"><button type="button" data-sa="x">Borrar serie</button><button type="button" data-sa="ok" class="g">Listo</button></div></div>';$('#sh').classList.add('o')}
+function step(a){const s=stp,e=s&&sets(s.k,s.id);if(!e)return close();
+ if(a==='ok'){close();stp=null;return rv()}
+ e.r[s.i]=a==='x'?0:cl((e.r[s.i]||0)+(a==='+'?1:-1),0,999);if(s.k<tk())PX=null;
+ if(!e.r[s.i]){close();stp=null;clean(s.k,s.id);rv()}else $('#sn').textContent=e.r[s.i];
+ sync(s.k);save();haptic()}
 function sheetEx(id){const e=id?ex(id):{n:'',gr:'',d:'',v:'',s:3,g:10,t:'',w:''};xe=id||0;
- $('#sh').innerHTML='<div class="bg"></div><div class="pn t"><input enterkeyhint="done" id="en" placeholder="Ejercicio" value="'+esc(e.n)+'"><input enterkeyhint="done" id="eg" list="gl" placeholder="Grupo (opcional)" value="'+esc(e.gr)+'"><datalist id="gl">'+[...new Set(S.x.ex.map(x=>x.gr).filter(Boolean))].map(g=>'<option value="'+esc(g)+'">').join('')+'</datalist><textarea id="ed" rows="2" placeholder="Descripción / pistas de técnica">'+esc(e.d)+'</textarea><input enterkeyhint="done" id="ev" inputmode="url" placeholder="Link de video (opcional)" value="'+esc(e.v)+'"><div class="r4"><label>Series<input id="es" type="number" inputmode="numeric" value="'+e.s+'"></label><label>Reps<input id="er" type="number" inputmode="numeric" value="'+e.g+'"></label><label>Tope<input id="et" type="number" inputmode="numeric" value="'+(e.t||'')+'"></label><label>kg<input id="ew" type="number" inputmode="decimal" step="any" value="'+(e.w||'')+'"></label></div><div class="ac">'+(id?'<button id="xdl">Eliminar</button>':'')+'<button id="xsv" class="g">Guardar</button></div></div>';$('#sh').classList.add('o')}
+ $('#sh').innerHTML='<div class="bg"></div><div class="pn t"><input enterkeyhint="done" id="en" placeholder="Ejercicio" value="'+esc(e.n)+'"><input enterkeyhint="done" id="eg" list="gl" placeholder="Grupo (opcional)" value="'+esc(e.gr)+'"><datalist id="gl">'+[...new Set(S.x.ex.map(x=>x.gr).filter(Boolean))].map(g=>'<option value="'+esc(g)+'">').join('')+'</datalist><textarea id="ed" rows="2" placeholder="Descripción / pistas de técnica">'+esc(e.d)+'</textarea><input enterkeyhint="done" id="ev" inputmode="url" placeholder="Link de video (opcional)" value="'+esc(e.v)+'"><div class="r4"><label>Series<input id="es" type="number" inputmode="numeric" value="'+e.s+'"></label><label>Reps<input id="er" type="number" inputmode="numeric" value="'+e.g+'"></label><label>Tope<input id="et" type="number" inputmode="numeric" value="'+(e.t||'')+'"></label><label>kg<input id="ew" type="number" inputmode="decimal" step="any" value="'+(e.w||'')+'"></label></div>'+(id?'<div class="mu sm">Si cambias series o reps, el cambio aplica desde ahora; tus sesiones anteriores conservan su meta.</div>':'')+'<div class="ac">'+(id?'<button id="xdl">Eliminar</button>':'')+'<button id="xsv" class="g">Guardar</button></div></div>';$('#sh').classList.add('o')}
 function xsave(){const n=$('#en').value.trim();if(!n)return;let v=$('#ev').value.trim();if(v&&!/^https?:\/\//i.test(v))v='https://'+v;try{if(v)new URL(v)}catch(e){v=''}
  const g=cl(Math.round(+$('#er').value)||10,1,200),t=Math.round(+$('#et').value)||0,o={n:n.slice(0,60),gr:$('#eg').value.trim().slice(0,24),d:$('#ed').value.trim().slice(0,400),v:v.slice(0,300),s:cl(Math.round(+$('#es').value)||3,1,10),g,t:t>g?cl(t,1,200):0,w:cl(+$('#ew').value||0,0,999)};
- if(xe&&ex(xe))Object.assign(ex(xe),o);else{o.id=S.x.nid++;S.x.ex.push(o);(S.x.rt[xd]=S.x.rt[xd]||[]).push(o.id)}save();close();render()}
-function xdel(){const id=xe;PX=null;S.x.ex=S.x.ex.filter(e=>e.id!==id);for(const d in S.x.rt)S.x.rt[d]=(S.x.rt[d]||[]).filter(x=>x!==id);
+ if(xe&&ex(xe))Object.assign(ex(xe),o);else{o.id=S.x.nid++;S.x.ex.push(o);rday(xd,1).ex.push(o.id)}save();close();render()}
+function xdel(){const id=xe;PX=null;S.x.ex=S.x.ex.filter(e=>e.id!==id);S.x.rn.forEach(r=>r.ex=r.ex.filter(x=>x!==id));
  for(const k of Object.keys(S.x.ses))if(S.x.ses[k][id]){delete S.x.ses[k][id];if(!Object.keys(S.x.ses[k]).length)delete S.x.ses[k];sync(k)}save();close();render()}
-function picker(){const rest=S.x.ex.filter(e=>!(S.x.rt[xd]||[]).includes(e.id));$('#sh').innerHTML='<div class="bg"></div><div class="pn"><div class="mu">Agregar a '+DN[xd]+'</div>'+rest.map(e=>'<button class="pk" data-pe="'+e.id+'">'+esc(e.n)+'</button>').join('')+'<div class="ac"><button class="g" id="pn">Nuevo ejercicio</button></div></div>';$('#sh').classList.add('o')}
+function picker(){const R=rn(S.x.wk[xd]),rest=S.x.ex.filter(e=>!R||!R.ex.includes(e.id));$('#sh').innerHTML='<div class="bg"></div><div class="pn"><div class="mu">Agregar a la rutina '+(R?esc(R.n):'de '+DN[xd])+'</div>'+rest.map(e=>'<button class="pk" data-pe="'+e.id+'">'+esc(e.n)+'</button>').join('')+'<div class="ac"><button class="g" id="pn">Nuevo ejercicio</button></div></div>';$('#sh').classList.add('o')}
+function rsel(){const k=xk();$('#sh').innerHTML='<div class="bg"></div><div class="pn"><div class="mu">Rutina para '+DN[xd]+' '+pd(k).getDate()+'</div>'+S.x.rn.map(r=>'<button class="pk" data-rs="'+r.id+'">Rutina '+esc(r.n)+'</button>').join('')+'<button class="pk" data-rs="0">Descanso</button></div>';$('#sh').classList.add('o')}
+function rren(){const R=rn(S.x.wk[xd]);if(!R)return;xr=R.id;$('#sh').innerHTML='<div class="bg"></div><div class="pn t"><input enterkeyhint="done" id="rnn" maxlength="12" value="'+esc(R.n)+'"><div class="ac"><button id="rdl">Eliminar rutina</button><button id="rsv" class="g">Guardar</button></div></div>';$('#sh').classList.add('o')}
 function xclick(t){const d=t.dataset;
- if(d.pe){const a=S.x.rt[xd]=S.x.rt[xd]||[];if(!a.includes(+d.pe))a.push(+d.pe);save();close();render();return true}
+ if(d.pe){const a=rday(xd,1).ex;if(!a.includes(+d.pe))a.push(+d.pe);save();close();render();return true}
+ if(d.rs!==undefined){const k=xk(),v=+d.rs;S.x.ov[k]=v;if(v===(S.x.wk[wd(pd(k))]||0))delete S.x.ov[k];save();close();rv();return true}
  if(t.id==='pn'){sheetEx(0);return true}if(d.sa){step(d.sa);return true}if(t.id==='xsv'){xsave();return true}
- if(t.id==='xdl'){if(confirm('¿Eliminar este ejercicio y su historial?'))xdel();return true}return false}
+ if(t.id==='xdl'){if(confirm('¿Eliminar este ejercicio y su historial?'))xdel();return true}
+ if(t.id==='rsv'){const R=rn(xr),n=$('#rnn').value.trim().slice(0,12);if(R&&n)R.n=n;save();close();rv();return true}
+ if(t.id==='rdl'){if(confirm('¿Eliminar esta rutina? Sus días quedarán en descanso.')){const id=xr;S.x.rn=S.x.rn.filter(r=>r.id!==id);for(const x in S.x.wk)if(S.x.wk[x]===id)delete S.x.wk[x];for(const k in S.x.ov)if(S.x.ov[k]===id)delete S.x.ov[k];save();close();rv()}return true}
+ return false}
 function xact(a){const d=a.dataset,id=+d.e;
  if(d.a==='xs'){xs=d.s;xd=wd(td());render()}else if(d.a==='day'){xd=+d.d;rv()}else if(d.a==='set')tapSet(id,+d.i);else if(d.a==='ex')sheetEx(id);
- else if(d.a==='rm'){S.x.rt[xd]=(S.x.rt[xd]||[]).filter(x=>x!==id);save();rv()}else if(d.a==='padd')picker()}
+ else if(d.a==='rm'){const R=rn(S.x.wk[xd]);if(R)R.ex=R.ex.filter(x=>x!==id);save();rv()}else if(d.a==='padd')picker();
+ else if(d.a==='wk'){if(+d.r)S.x.wk[xd]=+d.r;else delete S.x.wk[xd];save();rv()}
+ else if(d.a==='rnew'){rday(xd,0);const r={id:S.x.rnid++,n:nextN(),ex:[]};S.x.rn.push(r);S.x.wk[xd]=r.id;save();rv()}
+ else if(d.a==='rren')rren();else if(d.a==='rsel')rsel();else if(d.a==='pe'){po[id]=!po[id];rv()}else if(d.a==='pall'){pall=true;rv()}}
 function render(){const isx=tab==='x';$('#mt').textContent=isx?'Ejercicio':MES[cur.getMonth()]+' '+cur.getFullYear();$('#pv').style.display=$('#nx').style.display=isx?'none':'';
 $('#act').innerHTML=tab==='h'?'<button class="tx'+(S.heavy?' on':'')+'" id="hv">Semana pesada</button><button class="plus" id="add">+</button>':isx?(xs==='r'?'<button class="plus" id="xadd">+</button>':''):'<button class="tx" id="bk">Respaldo</button>';
 document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
@@ -200,7 +237,7 @@ function backup(){$('#sh').innerHTML='<div class="bg"></div><div class="pn t"><l
 const close=()=>$('#sh').classList.remove('o');
 
 $('#sh').onclick=e=>{const t=e.target;
-if(t.classList.contains('bg'))return close();if(xclick(t))return;
+if(t.classList.contains('bg')){close();if(stp){stp=null;if(tab==='x')rv()}return}if(xclick(t))return;
 if(t.dataset.p){ep=t.dataset.p;document.querySelectorAll('.pr button').forEach(b=>b.classList.toggle('s',b===t));warn()}
 if(t.id==='sv'){const n=$('#fn').value.trim();if(!n)return;const o={n,p:ep,g:Math.min(31,+$('#fg').value||0),m:$('#fm').value.trim(),t:$('#ft').value.trim()};
 if(ed)Object.assign(S.h.find(x=>x.id===ed),o);else{o.id=S.nid++;S.h.push(o)}save();close();render()}
